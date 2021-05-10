@@ -14,6 +14,6 @@ namespace ContosoUniversity.Data
         {
         }
 
-        public DbSet<ContosoUniversity.Models.Student> Student { get; set; }
+        public DbSet<Student> Student { get; set; }
     }
 }
