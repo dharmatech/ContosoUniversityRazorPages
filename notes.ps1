@@ -29,3 +29,13 @@ dotnet add package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore -v 5.0.0
 # ----------------------------------------------------------------------
 
 dotnet tool install --global dotnet-aspnet-codegenerator
+
+# ----------------------------------------------------------------------
+
+dotnet aspnet-codegenerator razorpage `
+    --model Student `
+    --dataContext ContosoUniversity.Data.SchoolContext `
+    --useDefaultLayout `
+    --relativeFolderPath Pages\Students `
+    --referenceScriptLibraries `
+    --useSqlite
