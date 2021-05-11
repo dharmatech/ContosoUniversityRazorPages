@@ -30,15 +30,21 @@ namespace ContosoUniversity.Pages.Students
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            var empty_student = new Student();
+
+            if (await TryUpdateModelAsync<Student>(
+                empty_student, 
+                "student", 
+                student => student.FirstMidName, 
+                student => student.LastName, 
+                student => student.EnrollmentDate))
             {
-                return Page();
+                _context.Students.Add(empty_student);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
-
-            _context.Students.Add(Student);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+                        
+            return Page();
         }
     }
 }
