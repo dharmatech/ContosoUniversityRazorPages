@@ -41,32 +41,23 @@ namespace ContosoUniversity.Pages.Students
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            var student = await _context.Students.FindAsync(id);
 
-            _context.Attach(Student).State = EntityState.Modified;
+            if (student == null) return NotFound();
 
-            try
+            if (await TryUpdateModelAsync<Student>(student, "student",
+                student => student.FirstMidName,
+                student => student.LastName,
+                student => student.EnrollmentDate))
             {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(Student.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+
+                return RedirectToPage("./Index");
             }
 
-            return RedirectToPage("./Index");
+            return Page();
         }
 
         private bool StudentExists(int id)
