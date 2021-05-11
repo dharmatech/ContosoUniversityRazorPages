@@ -29,8 +29,8 @@ namespace ContosoUniversity.Pages.Students
             {
                 return NotFound();
             }
-
-            Student = await _context.Students.FirstOrDefaultAsync(m => m.ID == id);
+                        
+            Student = await _context.Students.FindAsync(id);
 
             if (Student == null)
             {
