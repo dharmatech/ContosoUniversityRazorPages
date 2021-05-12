@@ -24,11 +24,11 @@ namespace ContosoUniversity.Pages.Students
         public string CurrentFilter { get; set; }
         public string CurrentSort { get; set; }
 
-        public IList<Student> Student { get;set; }
+        public IList<Student> Students { get;set; }
 
         public async Task OnGetAsync()
         {
-            Student = await _context.Students.ToListAsync();
+            Students = await _context.Students.ToListAsync();
         }
     }
 }
