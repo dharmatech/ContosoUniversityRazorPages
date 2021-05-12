@@ -26,9 +26,30 @@ namespace ContosoUniversity.Pages.Students
 
         public IList<Student> Students { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string sortOrder)
         {
-            Students = await _context.Students.ToListAsync();
+            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            DateSort = sortOrder == "Date" ? "date_desc" : "Date";
+                        
+            var students = _context.Students.Select(student => student);
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    students = students.OrderByDescending(student => student.LastName);
+                    break;
+                case "Date":
+                    students = students.OrderBy(student => student.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    students = students.OrderByDescending(student => student.EnrollmentDate);
+                    break;
+                default:
+                    students = students.OrderBy(student => student.LastName);
+                    break;
+            }
+                        
+            Students = await students.AsNoTracking().ToListAsync();
         }
     }
 }
