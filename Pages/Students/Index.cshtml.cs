@@ -19,6 +19,11 @@ namespace ContosoUniversity.Pages.Students
             _context = context;
         }
 
+        public string NameSort { get; set; }
+        public string DateSort { get; set; }
+        public string CurrentFilter { get; set; }
+        public string CurrentSort { get; set; }
+
         public IList<Student> Student { get;set; }
 
         public async Task OnGetAsync()
