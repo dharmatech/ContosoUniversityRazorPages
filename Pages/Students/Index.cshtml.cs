@@ -10,6 +10,15 @@ using ContosoUniversity.Models;
 
 namespace ContosoUniversity.Pages.Students
 {
+    public enum SortOrder
+    {
+        NameAsc,
+        NameDsc,
+        DateAsc,
+        DateDsc,
+        None
+    }
+
     public class IndexModel : PageModel
     {
         private readonly SchoolContext _context;
@@ -19,36 +28,28 @@ namespace ContosoUniversity.Pages.Students
             _context = context;
         }
 
-        public string NameSort { get; set; }
-        public string DateSort { get; set; }
+        public SortOrder NameSort { get; set; }
+        public SortOrder DateSort { get; set; }
         public string CurrentFilter { get; set; }
         public string CurrentSort { get; set; }
 
         public IList<Student> Students { get;set; }
+                
+        public async Task OnGetAsync(SortOrder sortOrder)
+        {            
+            NameSort = sortOrder == SortOrder.NameAsc ? SortOrder.NameDsc : SortOrder.NameAsc;
+            DateSort = sortOrder == SortOrder.DateAsc ? SortOrder.DateDsc : SortOrder.DateAsc;
 
-        public async Task OnGetAsync(string sortOrder)
-        {
-            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            DateSort = sortOrder == "Date" ? "date_desc" : "Date";
+            if (sortOrder == SortOrder.None) NameSort = SortOrder.NameDsc;
                         
             var students = _context.Students.Select(student => student);
 
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    students = students.OrderByDescending(student => student.LastName);
-                    break;
-                case "Date":
-                    students = students.OrderBy(student => student.EnrollmentDate);
-                    break;
-                case "date_desc":
-                    students = students.OrderByDescending(student => student.EnrollmentDate);
-                    break;
-                default:
-                    students = students.OrderBy(student => student.LastName);
-                    break;
-            }
-                        
+            if      (sortOrder == SortOrder.NameAsc) students = students.OrderBy(          student => student.LastName);
+            else if (sortOrder == SortOrder.NameDsc) students = students.OrderByDescending(student => student.LastName);
+            else if (sortOrder == SortOrder.DateAsc) students = students.OrderBy(          student => student.EnrollmentDate);
+            else if (sortOrder == SortOrder.DateDsc) students = students.OrderByDescending(student => student.EnrollmentDate);
+            else                                     students = students.OrderBy(          student => student.LastName);
+
             Students = await students.AsNoTracking().ToListAsync();
         }
     }
