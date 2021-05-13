@@ -35,14 +35,21 @@ namespace ContosoUniversity.Pages.Students
 
         public IList<Student> Students { get;set; }
                 
-        public async Task OnGetAsync(SortOrder sortOrder)
+        public async Task OnGetAsync(SortOrder sortOrder, string searchString)
         {            
             NameSort = sortOrder == SortOrder.NameAsc ? SortOrder.NameDsc : SortOrder.NameAsc;
             DateSort = sortOrder == SortOrder.DateAsc ? SortOrder.DateDsc : SortOrder.DateAsc;
 
             if (sortOrder == SortOrder.None) NameSort = SortOrder.NameDsc;
-                        
+
+            CurrentFilter = searchString;
+
             var students = _context.Students.Select(student => student);
+                        
+            if (!String.IsNullOrEmpty(searchString)) 
+                students = students.Where(student => 
+                    student.LastName.Contains(searchString) || 
+                    student.FirstMidName.Contains(searchString));
 
             if      (sortOrder == SortOrder.NameAsc) students = students.OrderBy(          student => student.LastName);
             else if (sortOrder == SortOrder.NameDsc) students = students.OrderByDescending(student => student.LastName);
