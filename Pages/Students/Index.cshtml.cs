@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Data;
 using ContosoUniversity.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace ContosoUniversity.Pages.Students
 {
@@ -22,25 +23,35 @@ namespace ContosoUniversity.Pages.Students
     public class IndexModel : PageModel
     {
         private readonly SchoolContext _context;
+        private readonly IConfiguration Configuration;
 
-        public IndexModel(SchoolContext context)
+        public IndexModel(SchoolContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
 
         public SortOrder NameSort { get; set; }
         public SortOrder DateSort { get; set; }
         public string CurrentFilter { get; set; }
-        public string CurrentSort { get; set; }
+        public SortOrder? CurrentSort { get; set; }
 
-        public IList<Student> Students { get;set; }
+        public PaginatedList<Student> Students { get;set; }
                 
-        public async Task OnGetAsync(SortOrder sortOrder, string searchString)
-        {            
+        public async Task OnGetAsync(SortOrder? sortOrder, string currentFilter, string searchString, int? pageIndex)
+        {
+            CurrentSort = sortOrder;
+
             NameSort = sortOrder == SortOrder.NameAsc ? SortOrder.NameDsc : SortOrder.NameAsc;
             DateSort = sortOrder == SortOrder.DateAsc ? SortOrder.DateDsc : SortOrder.DateAsc;
-
+            
             if (sortOrder == SortOrder.None) NameSort = SortOrder.NameDsc;
+            if (sortOrder == null)           NameSort = SortOrder.NameDsc;
+
+            if (searchString == null)
+                searchString = currentFilter;
+            else
+                pageIndex = 1;
 
             CurrentFilter = searchString;
 
@@ -57,7 +68,9 @@ namespace ContosoUniversity.Pages.Students
             else if (sortOrder == SortOrder.DateDsc) students = students.OrderByDescending(student => student.EnrollmentDate);
             else                                     students = students.OrderBy(          student => student.LastName);
 
-            Students = await students.AsNoTracking().ToListAsync();
+            var pageSize = Configuration.GetValue("PageSize", 4);
+
+            Students = await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
     }
 }
