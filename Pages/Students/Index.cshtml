@@ -68,20 +68,30 @@
 @{ 
     var prevDisabled = !Model.Students.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.Students.HasNextPage     ? "disabled" : "";
+
+    var args_prev = new OnGetAsyncParameters()
+    {
+        SortOrder = Model.CurrentSort,
+        PageIndex = Model.Students.PageIndex - 1,
+        CurrentFilter = Model.CurrentFilter
+    };
+
+    var args_next = new OnGetAsyncParameters()
+    {
+        SortOrder = Model.CurrentSort,
+        PageIndex = Model.Students.PageIndex + 1,
+        CurrentFilter = Model.CurrentFilter
+    };
 }
 
-<a asp-page="./Index" 
-   asp-route-sortOrder="@Model.CurrentSort" 
-   asp-route-pageIndex="@(Model.Students.PageIndex - 1)"
-   asp-route-currentFilter="@Model.CurrentFilter"
+<a asp-page="./Index"
+   asp-all-route-data="args_prev.ToDictionary()"
    class="btn btn-primary @prevDisabled">
     Previous
 </a>
 
 <a asp-page="./Index"
-   asp-route-sortOrder="@Model.CurrentSort"
-   asp-route-pageIndex="@(Model.Students.PageIndex + 1)"
-   asp-route-currentFilter="@Model.CurrentFilter"
+   asp-all-route-data="args_next.ToDictionary()"
    class="btn btn-primary @nextDisabled">
     Next
 </a>

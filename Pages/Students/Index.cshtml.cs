@@ -20,6 +20,26 @@ namespace ContosoUniversity.Pages.Students
         None
     }
 
+    public class OnGetAsyncParameters
+    {
+        public SortOrder? SortOrder { get; set; }
+        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; }
+        public int? PageIndex { get; set; }
+
+        public Dictionary<string, string> ToDictionary()
+        {
+            var dict = new Dictionary<string, string>();
+
+            if (SortOrder     != null) dict.Add("SortOrder",     SortOrder.ToString());
+            if (CurrentFilter != null) dict.Add("CurrentFilter", CurrentFilter);
+            if (SearchString  != null) dict.Add("SearchString",  SearchString);
+            if (PageIndex     != null) dict.Add("PageIndex",     PageIndex.ToString());
+
+            return dict;
+        }
+    }
+
     public class IndexModel : PageModel
     {
         private readonly SchoolContext _context;
@@ -38,8 +58,13 @@ namespace ContosoUniversity.Pages.Students
 
         public PaginatedList<Student> Students { get;set; }
                 
-        public async Task OnGetAsync(SortOrder? sortOrder, string currentFilter, string searchString, int? pageIndex)
+        public async Task OnGetAsync(OnGetAsyncParameters onGetAsyncParameters)
         {
+            var sortOrder = onGetAsyncParameters.SortOrder;
+            var currentFilter = onGetAsyncParameters.CurrentFilter;
+            var searchString = onGetAsyncParameters.SearchString;
+            var pageIndex = onGetAsyncParameters.PageIndex;
+
             CurrentSort = sortOrder;
 
             NameSort = sortOrder == SortOrder.NameAsc ? SortOrder.NameDsc : SortOrder.NameAsc;
