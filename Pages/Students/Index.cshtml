@@ -44,7 +44,8 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Students) {
+        @foreach (var item in Model.Students)
+        {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.LastName)
@@ -65,9 +66,9 @@
     </tbody>
 </table>
 
-@{ 
+@{
     var prevDisabled = !Model.Students.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.Students.HasNextPage     ? "disabled" : "";
+    var nextDisabled = !Model.Students.HasNextPage ? "disabled" : "";
 
     var args_prev = new OnGetAsyncParameters()
     {
@@ -82,40 +83,31 @@
         PageIndex = Model.Students.PageIndex + 1,
         CurrentFilter = Model.CurrentFilter
     };
-        
-    var dict_prev = args_prev
-        .GetType()
-        .GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
-        .ToDictionary(
-            prop => prop.Name,
-            prop =>
-            {
-                var val = prop.GetValue(args_prev, null);
 
-                return val == null ? "" : val.ToString();
-            });
+    Dictionary<string, string> to_dict(object obj)
+    {
+        return obj
+            .GetType()
+            .GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
+            .ToDictionary(
+                prop => prop.Name,
+                prop =>
+                {
+                    var val = prop.GetValue(obj, null);
 
-    var dict_next = args_next
-        .GetType()
-        .GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
-        .ToDictionary(
-            prop => prop.Name,
-            prop =>
-            {
-                var val = prop.GetValue(args_next, null);
-
-                return val == null ? "" : val.ToString();
-            });
+                    return val == null ? "" : val.ToString();
+                });
+    }
 }
 
 <a asp-page="./Index"
-   asp-all-route-data="dict_prev"
+   asp-all-route-data="to_dict(args_prev)"
    class="btn btn-primary @prevDisabled">
     Previous
 </a>
 
 <a asp-page="./Index"
-   asp-all-route-data="dict_next"
+   asp-all-route-data="to_dict(args_next)"
    class="btn btn-primary @nextDisabled">
     Next
 </a>
