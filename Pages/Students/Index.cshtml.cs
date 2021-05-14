@@ -26,18 +26,6 @@ namespace ContosoUniversity.Pages.Students
         public string CurrentFilter { get; set; }
         public string SearchString { get; set; }
         public int? PageIndex { get; set; }
-
-        public Dictionary<string, string> ToDictionary()
-        {
-            var dict = new Dictionary<string, string>();
-
-            if (SortOrder     != null) dict.Add("SortOrder",     SortOrder.ToString());
-            if (CurrentFilter != null) dict.Add("CurrentFilter", CurrentFilter);
-            if (SearchString  != null) dict.Add("SearchString",  SearchString);
-            if (PageIndex     != null) dict.Add("PageIndex",     PageIndex.ToString());
-
-            return dict;
-        }
     }
 
     public class IndexModel : PageModel

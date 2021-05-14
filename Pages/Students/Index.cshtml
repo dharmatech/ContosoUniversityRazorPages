@@ -82,16 +82,40 @@
         PageIndex = Model.Students.PageIndex + 1,
         CurrentFilter = Model.CurrentFilter
     };
+        
+    var dict_prev = args_prev
+        .GetType()
+        .GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
+        .ToDictionary(
+            prop => prop.Name,
+            prop =>
+            {
+                var val = prop.GetValue(args_prev, null);
+
+                return val == null ? "" : val.ToString();
+            });
+
+    var dict_next = args_next
+        .GetType()
+        .GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
+        .ToDictionary(
+            prop => prop.Name,
+            prop =>
+            {
+                var val = prop.GetValue(args_next, null);
+
+                return val == null ? "" : val.ToString();
+            });
 }
 
 <a asp-page="./Index"
-   asp-all-route-data="args_prev.ToDictionary()"
+   asp-all-route-data="dict_prev"
    class="btn btn-primary @prevDisabled">
     Previous
 </a>
 
 <a asp-page="./Index"
-   asp-all-route-data="args_next.ToDictionary()"
+   asp-all-route-data="dict_next"
    class="btn btn-primary @nextDisabled">
     Next
 </a>
