@@ -39,3 +39,9 @@ dotnet aspnet-codegenerator razorpage `
     --relativeFolderPath Pages\Students `
     --referenceScriptLibraries `
     --useSqlite
+
+# ----------------------------------------------------------------------
+    
+dotnet tool install --global dotnet-ef
+
+dotnet ef database drop --force
