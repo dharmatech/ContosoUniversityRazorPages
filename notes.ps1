@@ -45,3 +45,9 @@ dotnet aspnet-codegenerator razorpage `
 dotnet tool install --global dotnet-ef
 
 dotnet ef database drop --force
+
+# ----------------------------------------------------------------------
+
+dotnet ef migrations add InitialCreate
+
+dotnet ef database update
