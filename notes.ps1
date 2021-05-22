@@ -74,3 +74,12 @@ dotnet aspnet-codegenerator razorpage `
     --referenceScriptLibraries `
     --useSqlite
 
+# ----------------------------------------------------------------------
+
+dotnet aspnet-codegenerator razorpage `
+    --model Instructor `
+    --dataContext ContosoUniversity.Data.SchoolContext `
+    --useDefaultLayout `
+    --relativeFolderPath Pages\Instructors `
+    --referenceScriptLibraries `
+    --useSqlite
