@@ -12,19 +12,21 @@ namespace ContosoUniversity.Pages.Courses
 {
     public class IndexModel : PageModel
     {
-        private readonly ContosoUniversity.Data.SchoolContext _context;
+        private readonly SchoolContext _context;
 
-        public IndexModel(ContosoUniversity.Data.SchoolContext context)
+        public IndexModel(SchoolContext context)
         {
             _context = context;
         }
 
-        public IList<Course> Course { get;set; }
+        public IList<Course> Courses { get;set; }
 
         public async Task OnGetAsync()
         {
-            Course = await _context.Courses
-                .Include(c => c.Department).ToListAsync();
+            Courses = await _context.Courses
+                .Include(course => course.Department)
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }
