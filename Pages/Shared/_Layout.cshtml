@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿
+@{ 
+    async Task Template(string asp_page, string text)
+    { 
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="@asp_page">
+                @text
+            </a>
+        </li>
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,26 +30,13 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/About">About</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Students/Index">Students</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Courses/Index">Courses</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Instructors/Index">Instructors</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Departments/Index">Departments</a>
-                        </li>
+                        @{ 
+                            await Template("/About",             "About");
+                            await Template("/Students/Index",    "Students");
+                            await Template("/Courses/Index",     "Courses");
+                            await Template("/Instructors/Index", "Instructors");
+                            await Template("/Departments/Index", "Departments");
+                        }
                     </ul>
                 </div>
             </div>
