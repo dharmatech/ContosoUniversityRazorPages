@@ -30,7 +30,9 @@ namespace ContosoUniversity.Data
             modelBuilder.Entity<Course>().ToTable(nameof(Course))
                 .HasMany(course => course.Instructors).WithMany(instructor => instructor.Courses);
 
-            modelBuilder.Entity<Department>().ToTable(nameof(Department));
+            modelBuilder.Entity<Department>()
+                .ToTable(nameof(Department))
+                .Property(department => department.ConcurrencyToken).IsConcurrencyToken();
 
             modelBuilder.Entity<Instructor>().ToTable(nameof(Instructor));
 
