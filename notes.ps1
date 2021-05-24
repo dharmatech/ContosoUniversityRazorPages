@@ -89,3 +89,14 @@ dotnet aspnet-codegenerator razorpage `
 dotnet ef migrations add RowVersion
 
 dotnet ef database update
+
+# ----------------------------------------------------------------------
+
+dotnet aspnet-codegenerator razorpage `
+    --model Department `
+    --dataContext ContosoUniversity.Data.SchoolContext `
+    --useDefaultLayout `
+    --relativeFolderPath Pages\Departments `
+    --referenceScriptLibraries `
+    --useSqlite
+
