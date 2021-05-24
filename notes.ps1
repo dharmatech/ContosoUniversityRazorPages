@@ -83,3 +83,9 @@ dotnet aspnet-codegenerator razorpage `
     --relativeFolderPath Pages\Instructors `
     --referenceScriptLibraries `
     --useSqlite
+
+# ----------------------------------------------------------------------
+
+dotnet ef migrations add RowVersion
+
+dotnet ef database update
