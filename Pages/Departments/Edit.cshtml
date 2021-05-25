@@ -1,9 +1,7 @@
-@page
+@page "{id:int}"
 @model ContosoUniversity.Pages.Departments.EditModel
 
-@{
-    ViewData["Title"] = "Edit";
-}
+@{ ViewData["Title"] = "Edit"; }
 
 <h1>Edit</h1>
 
@@ -13,12 +11,22 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="Department.DepartmentID" />
+
+            <input type="hidden" asp-for="Department.ConcurrencyToken" />
+
+            <div class="form-group">
+                <label>Version</label>
+                @Utility.GetLastChars(Model.Department.ConcurrencyToken)
+            </div>
+
             <div class="form-group">
                 <label asp-for="Department.Name" class="control-label"></label>
                 <input asp-for="Department.Name" class="form-control" />
                 <span asp-validation-for="Department.Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Department.Budget" class="control-label"></label>
                 <input asp-for="Department.Budget" class="form-control" />
@@ -29,16 +37,13 @@
                 <input asp-for="Department.StartDate" class="form-control" />
                 <span asp-validation-for="Department.StartDate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Department.InstructorID" class="control-label"></label>
-                <select asp-for="Department.InstructorID" class="form-control" asp-items="ViewBag.InstructorID"></select>
+                <label class="control-label">Instructor</label>
+                <select asp-for="Department.InstructorID" class="form-control" asp-items="@Model.InstructorNameSL"></select>
                 <span asp-validation-for="Department.InstructorID" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Department.ConcurrencyToken" class="control-label"></label>
-                <input asp-for="Department.ConcurrencyToken" class="form-control" />
-                <span asp-validation-for="Department.ConcurrencyToken" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
