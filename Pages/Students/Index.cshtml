@@ -70,20 +70,6 @@
     var prevDisabled = !Model.Students.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.Students.HasNextPage ? "disabled" : "";
 
-    var args_prev = new OnGetAsyncParameters()
-    {
-        SortOrder = Model.CurrentSort,
-        PageIndex = Model.Students.PageIndex - 1,
-        CurrentFilter = Model.CurrentFilter
-    };
-
-    var args_next = new OnGetAsyncParameters()
-    {
-        SortOrder = Model.CurrentSort,
-        PageIndex = Model.Students.PageIndex + 1,
-        CurrentFilter = Model.CurrentFilter
-    };
-
     Dictionary<string, string> to_dict(object obj)
     {
         return obj
@@ -101,13 +87,23 @@
 }
 
 <a asp-page="./Index"
-   asp-all-route-data="to_dict(args_prev)"
+   asp-all-route-data="to_dict(new OnGetAsyncParameters()
+    {
+        SortOrder = Model.CurrentSort,
+        PageIndex = Model.Students.PageIndex - 1,
+        CurrentFilter = Model.CurrentFilter
+    })"
    class="btn btn-primary @prevDisabled">
     Previous
 </a>
 
 <a asp-page="./Index"
-   asp-all-route-data="to_dict(args_next)"
+   asp-all-route-data="to_dict(new OnGetAsyncParameters()
+    {
+        SortOrder = Model.CurrentSort,
+        PageIndex = Model.Students.PageIndex + 1,
+        CurrentFilter = Model.CurrentFilter
+    })"
    class="btn btn-primary @nextDisabled">
     Next
 </a>
